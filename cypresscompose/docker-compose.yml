@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+
+  backend:
+    build: ./backend
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+       - "3100:3100"  
+    command: bash -c "cd backend && npm run dev"
+  frontend:
+    build: ./frontend
+    ports:
+       - "4100:4100"
+    depends_on:
+       - backend
+    stdin_open: true   
+    command: bash -c "cd frontend && npm start" 
+         
